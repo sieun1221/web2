@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Switzerland</title>
+  <link rel="stylesheet" href="../country-page.css" />
+  <style>
+    body {
+      background: url("../images/switzerland.jpg") no-repeat center center / cover;
+    }
+  </style>
+</head>
+<body>
+  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
+
+  <h1 class="title">Switzerland</h1>
+  <div class="caption">만년설이 빚어낸 영원의 고요함 속으로.</div>
+
+  <div class="bottom-arc"></div>
+
+  <div class="mouse-trigger">
+    <div class="mouse-shape">
+      <div class="wheel"></div>
+    </div>
+  </div>
+
+  <div class="center-orb"></div>
+  <div class="orb-hint">Click to explore</div>
+
+  <div class="top-controls-wrapper">
+    <div class="music-bar-container">
+      <div class="music-bar-progress"></div>
+    </div>
+
+    <div class="volume-control">
+      <button class="volume-icon" type="button" aria-label="볼륨 조절">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+      </button> 
+      <div class="volume-slider">
+        <div class="volume-track">
+          <div class="volume-level"></div>
+          <div class="volume-handle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage-label"></div>
+
+  <div class="nav-container">
+    <button class="prev-stage-arrow" type="button" aria-label="이전 화면">‹</button>
+    <button class="reset-button" type="button" aria-label="다시 시도">↻</button>
+    <button class="next-stage-arrow" type="button" aria-label="다음 화면">›</button>
+  </div>
+
+  <audio id="background-audio" src="./audio/switzerland.mp3" loop preload="auto"></audio>
+  <audio id="sfx-audio" preload="auto"></audio>
+
+  <script src="country-scroll.js"></script>
+</body>
+</html>

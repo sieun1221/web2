@@ -1,0 +1,489 @@
+@import url("./font.css");
+
+/* 기본 구조 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-family: 'Pretendard', sans-serif;
+  position: relative;
+}
+
+/* 배경 */
+body {
+  background-image: url('./images/country_background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1.4s ease-in-out;
+}
+
+/* 오버레이 (화면 어둡게) */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  transition: background 1s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+body.content-active::before {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* UI 요소들 */
+.back-link {
+  position: absolute;
+  top: 40px;
+  left: 80px;
+  font-size: 15px;
+  color: #ddd;
+  text-decoration: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s, opacity 0.5s ease;
+  opacity: 0;
+  animation: slideUp 0.5s forwards 0.3s;
+}
+.back-link:hover {
+  color: #fff;
+}
+body.content-active .back-link {
+  opacity: 1 !important;
+}
+
+/* 타이틀 */
+.title {
+  position: absolute;
+  top: 40%;
+  left: 80px;
+  transform: translateY(-50%);
+  font-family: 'AlohaMagazine';
+  font-size: calc(96px * 1.8);
+  font-weight: 700;
+  margin: 0;
+  z-index: 5;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: slideUp 0.6s forwards 0.4s;
+}
+
+/* 캡션 */
+.caption {
+  position: absolute;
+  bottom: 110px;
+  left: 80px;
+  font-size: calc(18px * 1.3);
+  color: #eaeaea;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px 24px;
+  border-radius: 4px;
+  z-index: 5;
+  opacity: 0;
+  animation: slideUp 0.6s forwards 0.6s;
+  transition: 0.6s;
+}
+.caption::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.7);
+  animation: drawLine 0.5s forwards 0.8s;
+  transition: 0.6s;
+}
+
+@keyframes drawLine {
+  to { width: 100%; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 마우스 아이콘 */
+.mouse-trigger {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0.85;
+  transition: 0.35s;
+}
+.mouse-shape {
+  width: 28px;
+  height: 48px;
+  border: 2px solid #fff;
+  border-radius: 14px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.mouse-shape .wheel {
+  width: 4px;
+  height: 8px;
+  background: #fff;
+  border-radius: 2px;
+  margin-top: 8px;
+  animation: scrollWheel 1.5s infinite;
+}
+@keyframes scrollWheel {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%      { transform: translateY(6px); opacity: 0.5; }
+}
+body.scrolled .mouse-trigger {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 궤도 이미지 */
+.bottom-arc {
+  position: fixed;
+  width: 101vw;
+  height: 100vh;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: url('circle1.png') no-repeat center bottom / 101%;
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease-in-out 1.6s, transform 1.5s ease-out;
+}
+body.scrolled .bottom-arc {
+  opacity: 1;
+}
+body.content-active .bottom-arc {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(100px) scale(0.8);
+}
+
+/* 중앙 원형 */
+.center-orb {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.center-orb::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent 70%);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: 0.4s;
+  pointer-events: none;
+}
+.center-orb:hover::before {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+/* ORB 힌트 */
+.orb-hint {
+  position: fixed;
+  top: calc(50% + 70px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 16px;
+  opacity: 0;
+  z-index: 19;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.orb-hint.show {
+  opacity: 1;
+}
+
+body.scrolled .center-orb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  transition-delay: 2.0s;
+}
+body.scrolled .orb-hint {
+  opacity: 1;
+  transition-delay: 2.0s;
+}
+
+/* =================================================
+   [수정됨] 상단 UI 및 스테이지 라벨 스타일
+   =================================================
+*/
+
+/* 상단 컨트롤 래퍼 */
+.top-controls-wrapper {
+  position: fixed;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 101;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+body.volume-visible .top-controls-wrapper {
+  opacity: 1;
+}
+
+/* 음악 바 */
+.music-bar-container {
+  position: relative;
+  width: 260px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.music-bar-progress {
+  height: 100%;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: inherit;
+  transition: width 0.12s linear;
+}
+
+/* 볼륨 컨트롤 */
+.volume-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.volume-icon {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.volume-icon svg {
+  stroke-width: 2px;
+}
+.volume-icon:hover {
+  opacity: 0.7;
+}
+
+/* 슬라이더 팝업 */
+.volume-slider {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: 32px;
+  height: 130px;
+  padding: 8px 0;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 999px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.volume-control.open .volume-slider {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.volume-track {
+  position: relative;
+  width: 4px;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+.volume-level {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: #fff;
+}
+.volume-handle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 🚨 [수정됨] 스테이지 라벨 */
+.stage-label {
+  position: fixed;
+  /* 기존 100px -> 85px로 올려서 재생바와 더 가깝게 배치 */
+  top: 85px; 
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* 폰트 및 스타일 */
+  font-family: 'Sanchez', serif;
+  color: #ffffff !important;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  
+  /* z-index 최상위 설정 */
+  z-index: 9999; 
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  letter-spacing: 1px;
+  
+  /* 초기 투명도 */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+body.content-active .stage-label,
+body.nav-visible .stage-label {
+  opacity: 1;
+}
+
+/* 랜덤 원형 */
+.random-orb {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  cursor: pointer;
+  z-index: 60;
+  opacity: 0;
+  box-shadow: 0 0 15px rgba(255,255,255,0.9);
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+.random-orb.clicked {
+  opacity: 1 !important;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.9);
+  width: 26px;
+  height: 26px;
+  box-shadow: none;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 네비게이션 컨테이너 */
+.nav-container {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  z-index: 101;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+body.nav-visible .nav-container {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reset-button,
+.prev-stage-arrow,
+.next-stage-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 3px rgba(255,255,255,0.8);
+  transition: color 0.3s, transform 0.2s;
+}
+.reset-button:hover,
+.prev-stage-arrow:hover,
+.next-stage-arrow:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+.prev-stage-arrow.nav-disabled,
+.next-stage-arrow.nav-disabled {
+  opacity: 0.2 !important;
+  pointer-events: none !important;
+  color: #555;
+}
+
+/* 스크롤 후 텍스트 제거 */
+body.scrolled .title,
+body.scrolled .caption {
+  transform: none;
+  opacity: 1;
+}
+body.scrolled .caption,
+body.scrolled .caption::before {
+  background: none;
+  opacity: 0;
+}
+
+.title .char,
+.caption .char {
+  display: inline-block;
+  opacity: 1;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .title {
+    font-size: calc(60px * 1.8);
+  }
+  .caption {
+    bottom: 90px;
+  }
+  .nav-container {
+    gap: 30px;
+    bottom: 40px;
+  }
+}

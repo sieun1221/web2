@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japan - End of Journey</title>
+  <link rel="stylesheet" href="../end-page.css" />
+</head>
+<body>
+  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
+
+  <div class="end-container">
+    <div class="text-section">
+      <h1 class="main-title">Japan</h1>
+      <p class="description">
+        일본은 도쿄의 현대적 에너지, 교토의 전통적 정취, 오사카의 생활감 있는 활기가 공존하며, 짧은 이동만으로도 전혀 다른 도시 결을 경험할 수 있는 여행지다.<br><br>
+        초고층 빌딩과 네온사인, 수백 년 이어진 사찰과 목조 거리, 시장과 유흥이 어우러져 도시·자연·역사·대중문화가 균형 있게 배치된 것이 특징이다.
+      </p>
+      <a href="japan.html" class="again-btn">again</a>
+    </div>
+
+    <div class="carousel-section">
+      <svg class="orbit-line" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <path class="orbit-path" d="M -100 200 Q 720 450 1540 200" />
+      </svg>
+      <div class="card-container" id="card-wrap"></div>
+    </div>
+  </div>
+
+  <script>
+    const cardsData = [
+      { img: '../images/japan2.jpg', label: '01. Tokyo, morning', stage: 1 },
+      { img: '../images/japan3.jpg', label: '02. Kyoto, afternoon', stage: 2 },
+      { img: '../images/japan4.jpg', label: '03. Osaka, dinner', stage: 3 }
+    ];
+    const countryPage = "japan.html"; // 다시하기 링크용 변수
+
+    // --- 공통 로직 시작 ---
+    const cardWrap = document.getElementById('card-wrap');
+    const againBtn = document.querySelector('.again-btn');
+    
+    let currentIndex = 0; 
+    let visualProgress = 0; 
+    const totalCards = cardsData.length;
+    let isAnimating = false;
+
+    cardsData.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<img src="${data.img}" alt="${data.label}"><span class="card-label">${data.label}</span>`;
+      cardWrap.appendChild(card);
+    });
+
+    const cards = document.querySelectorAll('.card');
+
+    function animate() {
+      visualProgress += (currentIndex - visualProgress) * 0.1;
+      const activeIndexRound = Math.round(visualProgress);
+      
+      if (cardsData[activeIndexRound]) {
+        againBtn.href = `${countryPage}?start=${cardsData[activeIndexRound].stage}`;
+      }
+
+      cards.forEach((card, index) => {
+        const offset = index - visualProgress; 
+        const x = offset * 540; 
+        const y = Math.abs(offset) * 30 + Math.pow(offset, 2) * 20;
+        const scale = Math.max(0.8, 1 - Math.abs(offset) * 0.15);
+        const opacity = Math.max(0.3, 1 - Math.abs(offset) * 0.6);
+        const zIndex = 100 - Math.round(Math.abs(offset) * 10);
+
+        card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale})`;
+        card.style.zIndex = zIndex;
+        card.style.opacity = opacity;
+
+        if (Math.abs(offset) < 0.3) card.classList.add('active');
+        else card.classList.remove('active');
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('wheel', e => {
+      if (isAnimating) return;
+      const threshold = 30;
+      if (Math.abs(e.deltaY) > threshold) {
+        if (e.deltaY > 0) {
+          if (currentIndex < totalCards - 1) { currentIndex++; triggerWheelCooldown(); }
+        } else {
+          if (currentIndex > 0) { currentIndex--; triggerWheelCooldown(); }
+        }
+      }
+    });
+
+    function triggerWheelCooldown() {
+      isAnimating = true;
+      setTimeout(() => { isAnimating = false; }, 300);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* Pretendard Regular — 본문/캡션 */
+@font-face {
+    font-family: 'Pretendard';
+    src: url('./fonts/PRETENDARD-REGULAR.TTF') format('truetype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  
+  /* Sanchez Regular — main.html 중앙 라벨 */
+  @font-face {
+    font-family: 'Sanchez';
+    src: url('./fonts/SANCHEZ-REGULAR.TTF') format('truetype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  
+  /* AlohaMagazine — files/*.html 메인 타이틀 */
+  @font-face {
+    font-family: 'AlohaMagazine';
+    src: url('./fonts/ALOHAMAGAZINE-DEMOVERSION-REGULAR.OTF') format('opentype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'AlohaMagazine';
+    src: url('./fonts/ALOHAMAGAZINE-DEMOVERSION-BOLD.OTF') format('opentype');
+    font-weight: 700; font-style: normal;
+  }
+  @font-face {
+    font-family: 'AlohaMagazine';
+    src: url('./fonts/ALOHAMAGAZINE-DEMOVERSION-SEMIBOLD.OTF') format('opentype');
+    font-weight: 600; font-style: normal;
+  }
+  

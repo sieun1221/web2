@@ -1,0 +1,151 @@
+  @import url("./font.css");
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #eee;
+    font-family: 'Pretendard', sans-serif;
+    transition: background-image 0.8s ease-in-out;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65); 
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("circle.png");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: 101%;
+    overflow: hidden;
+    z-index: 3;
+  }
+
+  .item {
+    position: absolute;
+    bottom: 0;
+    width: 278px;
+    height: 462px;
+    background: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    transform-origin: center bottom;
+    transition: all 0.5s ease;
+    z-index: 5;
+    box-shadow: -18px 18px 28px rgba(0, 0, 0, 0.22);
+  }
+  .item.active {
+    box-shadow: -22px 22px 34px rgba(0, 0, 0, 0.3);
+  }
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .card-info {
+    position: absolute;
+    top: 9%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    font-family: 'Sanchez', serif;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.4s ease;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  }
+  .card-info.active {
+    opacity: 1;
+    top: 8%;
+  }
+
+  .country-name {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .card-info .underline {
+    width: 160px;
+    height: 2px;
+    background-color: #fff;
+    margin: 0 auto;
+    opacity: 0.9;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+  }
+
+  .controls {
+    position: fixed;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    font-size: 40px;
+    color: #333;
+    opacity: 0.9;
+    z-index: 9999;
+    user-select: none;
+  }
+  .controls .arrow {
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .controls .arrow:hover {
+    transform: scale(1.2);
+    color: black;
+  }
+
+  .transition-overlay {
+    position: fixed;
+    border-radius: 6px;
+    z-index: 99999;
+    pointer-events: none;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+    transition: width 0.8s cubic-bezier(0.25,1,0.5,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+  }
+  .transition-overlay .overlay-inner {
+    width: 100%;
+    height: 100%;
+    transform-origin: center center;
+    transition: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .transition-overlay .overlay-img {
+    width: auto;
+    height: 100%;
+    transition: filter 0.45s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1);
+  }
+  .transition-overlay.expand {
+    transform: translate(-50%, -50%) scale(var(--final-scale));
+  }
+  .transition-overlay.expand .overlay-img {
+    filter: brightness(0.7);
+    transform: translateY(var(--vertical-offset));
+  }
+
+  body.bg-japan { background-image: url('back/japan.jpg'); }
+  body.bg-ireland { background-image: url('back/ireland.jpg'); }
+  body.bg-turkiye { background-image: url('back/turkiye.jpg'); }
+  body.bg-switzerland { background-image: url('back/switzerland.jpg'); }

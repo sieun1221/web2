@@ -5,18 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ireland - End of Journey</title>
   <link rel="stylesheet" href="../end-page.css" />
+  
+  <style>
+    .card-container, .card {
+      pointer-events: auto !important; 
+      cursor: pointer;
+    }
+    .text-section {
+      pointer-events: none;
+    }
+    .text-section a {
+      pointer-events: auto; 
+    }
+  </style>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
-
+ 
   <div class="end-container">
     <div class="text-section">
       <h1 class="main-title">Ireland</h1>
       <p class="description">
-        아일랜드는 짙은 녹색의 언덕, 신비로운 켈트 문화, 그리고 활기찬 펍 문화가 조화를 이루는 곳입니다. 서쪽 해안의 절벽과 고대 유적들은 시간을 초월한 낭만을 선사합니다.<br><br>
-        더블린의 문학적 분위기와 골웨이의 예술적 감성이 어우러져, 자연과 인간의 역사가 깊이 연결된 독특한 분위기를 경험할 수 있습니다.
+        아일랜드는 '에메랄드 섬'이라 불릴 만큼 짙은 녹색의 자연과 신비로운 켈트 신화, 그리고 음악이 흐르는 펍 문화가 어우러진 낭만적인 나라입니다. 사람들의 따뜻한 환대가 여행을 더욱 빛나게 합니다.<br><br>
+        더블린은 문학의 향기가 짙게 밴 수도입니다. 오랜 역사를 지닌 도서관과 붉은 벽돌 건물 사이로 버스킹 음악이 흐르며, 활기찬 펍에서는 흑맥주와 함께 이야기꽃이 피어납니다.<br><br>
+        모헤어 절벽은 대자연의 웅장함을 보여줍니다. 대서양의 거친 파도가 부딪치는 깎아지른 절벽 끝에 서면, 세상을 압도하는 자연의 경이로움과 마주하게 됩니다.<br><br>
+        골웨이는 자유로운 예술의 도시입니다. 거리 곳곳에서 들려오는 음악과 보헤미안 감성, 그리고 다채로운 축제의 열기가 여행자의 저녁을 낭만으로 물들입니다.
       </p>
-      <a href="ireland.html" class="again-btn">again</a>
+      
+      <a href="../index.html?selected=1" class="again-btn">EXIT</a>
     </div>
 
     <div class="carousel-section">
@@ -37,7 +52,6 @@
 
     // --- 공통 로직 시작 ---
     const cardWrap = document.getElementById('card-wrap');
-    const againBtn = document.querySelector('.again-btn');
     
     let currentIndex = 0; 
     let visualProgress = 0; 
@@ -45,8 +59,12 @@
     let isAnimating = false;
 
     cardsData.forEach(data => {
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = `${countryPage}?start=${data.stage}`; 
       card.className = 'card';
+      card.style.textDecoration = 'none'; 
+      card.style.color = 'inherit';
+      card.style.display = 'flex';
       card.innerHTML = `<img src="${data.img}" alt="${data.label}"><span class="card-label">${data.label}</span>`;
       cardWrap.appendChild(card);
     });
@@ -55,11 +73,6 @@
 
     function animate() {
       visualProgress += (currentIndex - visualProgress) * 0.1;
-      const activeIndexRound = Math.round(visualProgress);
-      
-      if (cardsData[activeIndexRound]) {
-        againBtn.href = `${countryPage}?start=${cardsData[activeIndexRound].stage}`;
-      }
 
       cards.forEach((card, index) => {
         const offset = index - visualProgress; 

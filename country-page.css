@@ -14,14 +14,15 @@ html, body {
 
 /* 배경 */
 body {
-  background-image: url('./images/country_background.jpg');
+  /* images 폴더 안의 배경 이미지 */
+  background-image: url('images/country_background.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   transition: background-image 1.4s ease-in-out;
 }
 
-/* 오버레이 (화면 어둡게) */
+/* 오버레이 */
 body::before {
   content: "";
   position: absolute;
@@ -58,10 +59,10 @@ body.content-active .back-link {
   opacity: 1 !important;
 }
 
-/* 타이틀 */
+/* 🚨 [원상복구] 타이틀: 원래 크기(1.8배)와 위치(37%)로 되돌림 */
 .title {
   position: absolute;
-  top: 40%;
+  top: 37%; 
   left: 80px;
   transform: translateY(-50%);
   font-family: 'AlohaMagazine';
@@ -74,12 +75,12 @@ body.content-active .back-link {
   animation: slideUp 0.6s forwards 0.4s;
 }
 
-/* 캡션 */
+/* 🚨 [원상복구] 캡션: 원래 크기(16px)와 위치(63%)로 되돌림 */
 .caption {
   position: absolute;
-  bottom: 110px;
+  top: 63%; 
   left: 80px;
-  font-size: calc(18px * 1.3);
+  font-size: 16px; 
   color: #eaeaea;
   background: rgba(0, 0, 0, 0.4);
   padding: 16px 24px;
@@ -151,27 +152,46 @@ body.scrolled .mouse-trigger {
   pointer-events: none !important;
 }
 
-/* 궤도 이미지 */
-.bottom-arc {
+
+/* =========================================================
+   [이미지 설정] circle.png 사용
+   ========================================================= */
+
+/* 1. 블러 레이어 (사용 안 함) */
+.bottom-arc-blur {
+  display: none !important;
+}
+
+/* 2. 메인 이미지 레이어 (circle.png) */
+.bottom-arc-line {
   position: fixed;
-  width: 101vw;
+  width: 100%;
   height: 100vh;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background: url('circle1.png') no-repeat center bottom / 101%;
-  z-index: 4;
+  left: 0;
+  z-index: 4; 
+
+  /* circle.png 파일 사용 */
+  background-image: url('./circle.png');
+  background-size: contain; 
+  background-repeat: no-repeat;
+  background-position: bottom center;
+
   opacity: 0;
   pointer-events: none;
   transition: opacity 1.5s ease-in-out 1.6s, transform 1.5s ease-out;
 }
-body.scrolled .bottom-arc {
+
+body.scrolled .bottom-arc-line {
   opacity: 1;
 }
-body.content-active .bottom-arc {
+
+/* 다음 단계 진입 시 이동 */
+body.content-active .bottom-arc-line {
   opacity: 1 !important;
-  transform: translateX(-50%) translateY(100px) scale(0.8);
+  transform: translateY(50px) scale(0.95);
 }
+
 
 /* 중앙 원형 */
 .center-orb {
@@ -232,10 +252,9 @@ body.scrolled .orb-hint {
   transition-delay: 2.0s;
 }
 
-/* =================================================
-   [수정됨] 상단 UI 및 스테이지 라벨 스타일
-   =================================================
-*/
+/* =========================================================
+   [상단 UI] 사운드 바 중앙 정렬 + 아이콘 오른쪽 이동
+   ========================================================= */
 
 /* 상단 컨트롤 래퍼 */
 .top-controls-wrapper {
@@ -245,7 +264,8 @@ body.scrolled .orb-hint {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+  width: fit-content; 
   z-index: 101;
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -271,13 +291,16 @@ body.volume-visible .top-controls-wrapper {
   transition: width 0.12s linear;
 }
 
-/* 볼륨 컨트롤 */
+/* 볼륨 컨트롤 (아이콘) */
 .volume-control {
-  position: relative;
+  position: absolute;
+  left: 100%;
+  margin-left: 25px; 
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .volume-icon {
   width: 32px;
   height: 32px;
@@ -350,27 +373,20 @@ body.volume-visible .top-controls-wrapper {
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 🚨 [수정됨] 스테이지 라벨 */
+/* 🚨 [유지] 스테이지 라벨은 위로 올리고 작게 설정 */
 .stage-label {
   position: fixed;
-  /* 기존 100px -> 85px로 올려서 재생바와 더 가깝게 배치 */
-  top: 85px; 
+  top: 72px; /* 상향 조정 */
   left: 50%;
   transform: translateX(-50%);
-  
-  /* 폰트 및 스타일 */
   font-family: 'Sanchez', serif;
   color: #ffffff !important;
-  font-size: 20px;
+  font-size: 16px; /* 크기 축소 */
   font-weight: 400;
   text-align: center;
-  
-  /* z-index 최상위 설정 */
   z-index: 9999; 
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
   letter-spacing: 1px;
-  
-  /* 초기 투명도 */
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;

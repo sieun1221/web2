@@ -5,18 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Switzerland - End of Journey</title>
   <link rel="stylesheet" href="../end-page.css" />
+  
+  <style>
+    .card-container, .card {
+      pointer-events: auto !important; 
+      cursor: pointer;
+    }
+    .text-section {
+      pointer-events: none;
+    }
+    .text-section a {
+      pointer-events: auto; 
+    }
+  </style>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
-
+ 
   <div class="end-container">
     <div class="text-section">
       <h1 class="main-title">Switzerland</h1>
       <p class="description">
-        스위스는 알프스 산맥의 웅장함과 깨끗한 호수의 아름다움이 완벽하게 어우러진 나라입니다. 취리히의 금융 중심지와 인터라켄의 아웃도어 성지가 공존합니다.<br><br>
-        정교한 기술력과 자연 보호에 대한 높은 인식이 스위스를 세계에서 가장 평화롭고 효율적인 여행지 중 하나로 만듭니다.
+        스위스는 알프스 산맥의 웅장한 설산과 투명한 호수가 빚어낸 그림 같은 풍경을 자랑합니다. 평화로운 자연 속에서도 세계 최고의 정밀함과 질서가 공존하는 청정 여행지입니다.<br><br>
+        인터라켄은 모험과 휴식의 관문입니다. 에메랄드빛 두 호수 사이에서 패러글라이딩으로 하늘을 날거나, 융프라우요흐로 향하는 산악열차에 몸을 실을 수 있습니다.<br><br>
+        취리히는 세련된 도시의 멋을 보여줍니다. 호반의 여유로움과 금융 도시의 현대적인 면모가 어우러져, 럭셔리한 쇼핑과 문화예술을 동시에 즐길 수 있는 곳입니다.<br><br>
+        마터호른은 알프스의 영혼과도 같습니다. 날카롭게 솟은 봉우리의 위엄 있는 자태와 그 아래 자리한 청정 마을 체르마트에서의 저녁은 잊지 못할 감동을 선사합니다.
       </p>
-      <a href="switzerland.html" class="again-btn">again</a>
+      
+      <a href="../index.html?selected=3" class="again-btn">EXIT</a>
     </div>
 
     <div class="carousel-section">
@@ -33,11 +48,10 @@
       { img: '../images/switzerland3.jpg', label: '02. Zurich, afternoon', stage: 2 },
       { img: '../images/switzerland4.jpg', label: '03. Matterhorn, dinner', stage: 3 }
     ];
-    const countryPage = "switzerland.html";
+    const countryPage = "switzerland.html"; 
 
     // --- 공통 로직 시작 ---
     const cardWrap = document.getElementById('card-wrap');
-    const againBtn = document.querySelector('.again-btn');
     
     let currentIndex = 0; 
     let visualProgress = 0; 
@@ -45,8 +59,12 @@
     let isAnimating = false;
 
     cardsData.forEach(data => {
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = `${countryPage}?start=${data.stage}`; 
       card.className = 'card';
+      card.style.textDecoration = 'none'; 
+      card.style.color = 'inherit';
+      card.style.display = 'flex';
       card.innerHTML = `<img src="${data.img}" alt="${data.label}"><span class="card-label">${data.label}</span>`;
       cardWrap.appendChild(card);
     });
@@ -55,11 +73,6 @@
 
     function animate() {
       visualProgress += (currentIndex - visualProgress) * 0.1;
-      const activeIndexRound = Math.round(visualProgress);
-      
-      if (cardsData[activeIndexRound]) {
-        againBtn.href = `${countryPage}?start=${cardsData[activeIndexRound].stage}`;
-      }
 
       cards.forEach((card, index) => {
         const offset = index - visualProgress; 

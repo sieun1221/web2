@@ -5,18 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Japan - End of Journey</title>
   <link rel="stylesheet" href="../end-page.css" />
+  
+  <style>
+    /* 🚨 [중요 수정] 카드가 클릭되도록 강제로 설정 */
+    .card-container, .card {
+      pointer-events: auto !important; 
+      cursor: pointer;
+    }
+    
+    /* 혹시 텍스트 섹션이 버튼을 가리지 않게 설정 */
+    .text-section {
+      pointer-events: none;
+    }
+    .text-section a {
+      pointer-events: auto; /* 버튼은 클릭되게 */
+    }
+  </style>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
-
+ 
   <div class="end-container">
     <div class="text-section">
       <h1 class="main-title">Japan</h1>
       <p class="description">
-        일본은 도쿄의 현대적 에너지, 교토의 전통적 정취, 오사카의 생활감 있는 활기가 공존하며, 짧은 이동만으로도 전혀 다른 도시 결을 경험할 수 있는 여행지다.<br><br>
-        초고층 빌딩과 네온사인, 수백 년 이어진 사찰과 목조 거리, 시장과 유흥이 어우러져 도시·자연·역사·대중문화가 균형 있게 배치된 것이 특징이다.
+        일본은 최첨단 현대 문명과 고즈넉한 전통이 완벽한 조화를 이루는 매혹적인 나라입니다. 사계절이 뚜렷한 자연 속에서 독자적인 미학과 질서를 유지하며, 방문하는 여행자들에게 깊은 영감을 줍니다.<br><br>
+        도쿄는 멈추지 않는 일본의 심장입니다. 하늘을 찌르는 마천루와 화려한 네온사인, 시부야의 거대한 인파 속에서 느껴지는 현대 도시의 강렬한 에너지가 아침을 깨웁니다.<br><br>
+        교토는 시간의 흐름을 잊게 만드는 고도(古都)입니다. 천 년의 역사를 간직한 사찰과 고요한 정원, 기모노 자락이 스치는 거리에서 일본 본연의 정취를 느낄 수 있습니다.<br><br>
+        오사카는 활기 넘치는 미식의 도시입니다. 도톤보리의 화려한 간판 아래, 다채로운 길거리 음식과 사람들의 호탕한 웃음소리가 여행의 밤을 즐겁게 채웁니다.
       </p>
-      <a href="japan.html" class="again-btn">again</a>
+      
+      <a href="../index.html?selected=0" class="again-btn">EXIT</a>
     </div>
 
     <div class="carousel-section">
@@ -33,11 +51,10 @@
       { img: '../images/japan3.jpg', label: '02. Kyoto, afternoon', stage: 2 },
       { img: '../images/japan4.jpg', label: '03. Osaka, dinner', stage: 3 }
     ];
-    const countryPage = "japan.html"; // 다시하기 링크용 변수
+    const countryPage = "japan.html"; 
 
     // --- 공통 로직 시작 ---
     const cardWrap = document.getElementById('card-wrap');
-    const againBtn = document.querySelector('.again-btn');
     
     let currentIndex = 0; 
     let visualProgress = 0; 
@@ -45,8 +62,19 @@
     let isAnimating = false;
 
     cardsData.forEach(data => {
-      const card = document.createElement('div');
+      // 1. div 대신 a 태그로 생성 (링크 기능)
+      const card = document.createElement('a');
+      
+      // 2. 클릭 시 이동할 주소 (각 스테이지 번호를 달고 이동)
+      card.href = `${countryPage}?start=${data.stage}`; 
+      
       card.className = 'card';
+      
+      // 3. 스타일 유지
+      card.style.textDecoration = 'none'; 
+      card.style.color = 'inherit';
+      card.style.display = 'flex';
+
       card.innerHTML = `<img src="${data.img}" alt="${data.label}"><span class="card-label">${data.label}</span>`;
       cardWrap.appendChild(card);
     });
@@ -55,11 +83,6 @@
 
     function animate() {
       visualProgress += (currentIndex - visualProgress) * 0.1;
-      const activeIndexRound = Math.round(visualProgress);
-      
-      if (cardsData[activeIndexRound]) {
-        againBtn.href = `${countryPage}?start=${cardsData[activeIndexRound].stage}`;
-      }
 
       cards.forEach((card, index) => {
         const offset = index - visualProgress; 

@@ -18,7 +18,10 @@ const countryLinks = [
   'files/switzerland.html'
 ];
 
-let current = 0;
+/* 🚨 [추가된 기능] URL 파라미터(?selected=숫자) 읽기 */
+const params = new URLSearchParams(window.location.search);
+// 파라미터가 있으면 그 번호로, 없으면 0(일본)으로 시작
+let current = params.has('selected') ? parseInt(params.get('selected')) : 0;
 
 /* ==========================================================
    🔒 입력 락 (연타 방지)
@@ -33,7 +36,8 @@ function lockInput() {
 /* ==========================================================
    🌀 카드 궤도 업데이트
 ========================================================== */
-function updateOrbit() {
+// isImmediate 파라미터 추가: true일 경우 애니메이션(transition)을 끕니다.
+function updateOrbit(isImmediate = false) {
   const total = items.length;
   const radiusX = window.innerHeight * 1.08;
   const radiusY = window.innerHeight * 0.82;
@@ -68,6 +72,13 @@ function updateOrbit() {
       items[i].style.transformOrigin = 'center bottom';
     }
 
+    // 🚨 즉시 이동 모드일 경우 transition을 잠시 끕니다
+    if (isImmediate) {
+        items[i].style.transition = 'none';
+    } else {
+        items[i].style.transition = ''; // CSS에 설정된 기본값(transition)으로 복구
+    }
+
     items[i].style.left = `${centerX + x - 139}px`;
     items[i].style.bottom = `${bottom + deltaBottom}px`;
     items[i].style.transform = `scale(${scale})`;
@@ -89,10 +100,18 @@ function updateOrbit() {
 
   countryName.textContent = countryList[current];
   info.classList.add('active');
+
+  // 즉시 이동 후, 약간의 딜레이 뒤에 다시 transition을 살립니다 (부드러운 움직임을 위해)
+  if (isImmediate) {
+      setTimeout(() => {
+          items.forEach(item => item.style.transition = '');
+      }, 50);
+  }
 }
 
-updateOrbit();
-window.addEventListener('resize', updateOrbit);
+// 🚨 초기 실행 시 URL 파라미터가 있으면 즉시 이동(true)
+updateOrbit(params.has('selected'));
+window.addEventListener('resize', () => updateOrbit(false));
 
 /* ==========================================================
    ⌨️ 네비게이션 입력

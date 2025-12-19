@@ -4,62 +4,87 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Türkiye</title>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('start') || params.has('stage')) {
+        document.documentElement.className += ' fast-mode';
+      }
+    })();
+  </script>
+
   <link rel="stylesheet" href="../country-page.css" />
   <style>
     body {
       background: url("../images/turkiye.jpg") no-repeat center center / cover;
     }
+
+    /* [Fast Mode] 인트로 삭제 */
+    html.fast-mode .title, html.fast-mode .caption, html.fast-mode .mouse-trigger,
+    html.fast-mode .center-orb, html.fast-mode .orb-hint { display: none !important; }
+
+    /* [Fast Mode] UI 즉시 표시 */
+    html.fast-mode .top-controls-wrapper, html.fast-mode .nav-container,
+    html.fast-mode .back-link, html.fast-mode .stage-label {
+      opacity: 1 !important; visibility: visible !important; animation: none !important; transition: none !important; pointer-events: auto !important;
+    }
+
+    /* [Fast Mode] 배경 고정 */
+    html.fast-mode body::before { background: rgba(0, 0, 0, 0.5) !important; transition: none !important; }
+
+    /* 🚨 [수정] 궤도 위치 고정 (두 레이어 모두 적용) */
+    html.fast-mode .bottom-arc-blur,
+    html.fast-mode .bottom-arc-line { opacity: 1 !important; transform: translateX(-50%) translateY(100px) scale(0.8) !important; transition: none !important; }
+
+    /* [네비게이션] 깜빡임 제거 */
+    .nav-container, .nav-container button, .nav-container a { transition: none !important; animation: none !important; }
+    .nav-container button:not(.nav-disabled), .nav-container a:not(.nav-disabled) { opacity: 1 !important; }
+    .nav-disabled { opacity: 0.3 !important; }
   </style>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
+  <a href="../index.html?selected=2" class="back-link">메인화면으로 나가기</a>
 
   <h1 class="title">Türkiye</h1>
   <div class="caption">동양과 서양의 경계에서 만나는 천년의 신비.</div>
 
-  <div class="bottom-arc"></div>
+  <div class="bottom-arc-blur"></div>
+  <div class="bottom-arc-line"></div>
 
-  <div class="mouse-trigger">
-    <div class="mouse-shape">
-      <div class="wheel"></div>
-    </div>
-  </div>
-
-  <div class="center-orb"></div>
+  <div class="mouse-trigger"><div class="mouse-shape"><div class="wheel"></div></div></div>
+  <div class="center-orb" id="enterBtn"></div>
   <div class="orb-hint">Click to explore</div>
 
   <div class="top-controls-wrapper">
-    <div class="music-bar-container">
-      <div class="music-bar-progress"></div>
-    </div>
-
+    <div class="music-bar-container"><div class="music-bar-progress"></div></div>
     <div class="volume-control">
-      <button class="volume-icon" type="button" aria-label="볼륨 조절">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        </svg>
-      </button> 
-      <div class="volume-slider">
-        <div class="volume-track">
-          <div class="volume-level"></div>
-          <div class="volume-handle"></div>
-        </div>
-      </div>
+      <button class="volume-icon" type="button"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></button> 
+      <div class="volume-slider"><div class="volume-track"><div class="volume-level"></div><div class="volume-handle"></div></div></div>
     </div>
   </div>
 
   <div class="stage-label"></div>
 
   <div class="nav-container">
-    <button class="prev-stage-arrow" type="button" aria-label="이전 화면">‹</button>
-    <button class="reset-button" type="button" aria-label="다시 시도">↻</button>
-    <button class="next-stage-arrow" type="button" aria-label="다음 화면">›</button>
+    <button class="prev-stage-arrow" type="button">‹</button>
+    <button class="reset-button" type="button">↻</button>
+    <button class="next-stage-arrow" type="button">›</button>
   </div>
 
   <audio id="background-audio" src="./audio/turkiye.mp3" loop preload="auto"></audio>
   <audio id="sfx-audio" preload="auto"></audio>
 
   <script src="country-scroll.js"></script>
+  <script>
+    if (document.documentElement.className.includes('fast-mode')) {
+      document.body.classList.add('content-active', 'volume-visible', 'nav-visible', 'scrolled');
+    }
+    if(document.getElementById('enterBtn')) {
+        document.getElementById('enterBtn').addEventListener('click', () => {
+            document.body.classList.add('content-active', 'volume-visible', 'nav-visible');
+        });
+    }
+  </script>
 </body>
 </html>

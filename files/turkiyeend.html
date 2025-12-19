@@ -5,18 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Türkiye - End of Journey</title>
   <link rel="stylesheet" href="../end-page.css" />
+  
+  <style>
+    .card-container, .card {
+      pointer-events: auto !important; 
+      cursor: pointer;
+    }
+    .text-section {
+      pointer-events: none;
+    }
+    .text-section a {
+      pointer-events: auto; 
+    }
+  </style>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
-
+ 
   <div class="end-container">
     <div class="text-section">
       <h1 class="main-title">Türkiye</h1>
       <p class="description">
-        튀르키예는 아시아와 유럽을 잇는 이스탄불을 중심으로 고대 문명과 현대 문화가 교차하는 활기찬 국가입니다. 카파도키아의 기암괴석과 에게 해의 푸른 물결이 조화를 이룹니다.<br><br>
-        동서양의 다양한 건축 양식과 풍부한 역사가 어우러져 매혹적인 분위기를 선사하는 곳입니다.
+        튀르키예는 동양과 서양, 고대와 현대가 교차하는 문명의 용광로입니다. 화려한 모스크와 비현실적인 자연 경관, 그리고 향신료 향 가득한 바자르가 여행자의 오감을 자극합니다.<br><br>
+        이스탄불은 두 대륙을 품은 유일한 도시입니다. 보스포러스 해협을 사이에 두고 솟아오른 미나렛과 돔, 그리고 그랜드 바자르의 활기는 천년 제국의 위엄을 보여줍니다.<br><br>
+        카파도키아는 신비로운 마법의 땅입니다. 기이하게 솟은 바위들 사이로 떠오르는 수백 개의 열기구는 마치 동화 속 한 장면 같은 환상적인 아침을 선물합니다.<br><br>
+        안탈리아는 지중해의 보석입니다. 눈부신 터키옥색 바다와 고대 로마의 유적, 그리고 따스한 햇살이 어우러져 완벽한 휴식과 낭만적인 저녁을 선사합니다.
       </p>
-      <a href="turkiye.html" class="again-btn">again</a>
+      
+      <a href="../index.html?selected=2" class="again-btn">EXIT</a>
     </div>
 
     <div class="carousel-section">
@@ -33,11 +48,10 @@
       { img: '../images/turkiye3.jpg', label: '02. Cappadocia, afternoon', stage: 2 },
       { img: '../images/turkiye4.jpg', label: '03. Antalya, dinner', stage: 3 }
     ];
-    const countryPage = "turkiye.html";
+    const countryPage = "turkiye.html"; 
 
     // --- 공통 로직 시작 ---
     const cardWrap = document.getElementById('card-wrap');
-    const againBtn = document.querySelector('.again-btn');
     
     let currentIndex = 0; 
     let visualProgress = 0; 
@@ -45,8 +59,12 @@
     let isAnimating = false;
 
     cardsData.forEach(data => {
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = `${countryPage}?start=${data.stage}`; 
       card.className = 'card';
+      card.style.textDecoration = 'none'; 
+      card.style.color = 'inherit';
+      card.style.display = 'flex';
       card.innerHTML = `<img src="${data.img}" alt="${data.label}"><span class="card-label">${data.label}</span>`;
       cardWrap.appendChild(card);
     });
@@ -55,11 +73,6 @@
 
     function animate() {
       visualProgress += (currentIndex - visualProgress) * 0.1;
-      const activeIndexRound = Math.round(visualProgress);
-      
-      if (cardsData[activeIndexRound]) {
-        againBtn.href = `${countryPage}?start=${cardsData[activeIndexRound].stage}`;
-      }
 
       cards.forEach((card, index) => {
         const offset = index - visualProgress; 

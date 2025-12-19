@@ -9,30 +9,70 @@
     body {
       background: url("../images/switzerland.jpg") no-repeat center center / cover;
     }
+
+    /* 🚨 [Fast Mode] 인트로 요소 숨기기 */
+    html.fast-mode .title,
+    html.fast-mode .caption,
+    html.fast-mode .mouse-trigger,
+    html.fast-mode .center-orb,
+    html.fast-mode .orb-hint {
+      display: none !important;
+    }
+
+    /* 🚨 [Fast Mode] UI 요소 즉시 표시 */
+    html.fast-mode .top-controls-wrapper,
+    html.fast-mode .nav-container,
+    html.fast-mode .back-link,
+    html.fast-mode .stage-label {
+      opacity: 1 !important;
+      animation: none !important;
+      transition: none !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+
+    /* 🚨 [Fast Mode] 배경 */
+    html.fast-mode body::before {
+      background: rgba(0, 0, 0, 0.5) !important;
+      transition: none !important;
+    }
+    
+    /* 🚨 [수정] 궤도 위치 고정 (두 레이어 모두 적용) */
+    html.fast-mode .bottom-arc-blur,
+    html.fast-mode .bottom-arc-line {
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(100px) scale(0.8) !important;
+      transition: none !important;
+    }
   </style>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('start') || params.has('stage')) {
+        document.documentElement.classList.add('fast-mode');
+      }
+    })();
+  </script>
 </head>
 <body>
-  <a href="../main.html" class="back-link">메인화면으로 나가기</a>
+  <a href="../index.html?selected=3" class="back-link">메인화면으로 나가기</a>
 
   <h1 class="title">Switzerland</h1>
   <div class="caption">만년설이 빚어낸 영원의 고요함 속으로.</div>
 
-  <div class="bottom-arc"></div>
+  <div class="bottom-arc-blur"></div>
+  <div class="bottom-arc-line"></div>
 
   <div class="mouse-trigger">
-    <div class="mouse-shape">
-      <div class="wheel"></div>
-    </div>
+    <div class="mouse-shape"><div class="wheel"></div></div>
   </div>
 
-  <div class="center-orb"></div>
+  <div class="center-orb" id="enterBtn"></div>
   <div class="orb-hint">Click to explore</div>
 
   <div class="top-controls-wrapper">
-    <div class="music-bar-container">
-      <div class="music-bar-progress"></div>
-    </div>
-
+    <div class="music-bar-container"><div class="music-bar-progress"></div></div>
     <div class="volume-control">
       <button class="volume-icon" type="button" aria-label="볼륨 조절">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -41,10 +81,7 @@
         </svg>
       </button> 
       <div class="volume-slider">
-        <div class="volume-track">
-          <div class="volume-level"></div>
-          <div class="volume-handle"></div>
-        </div>
+        <div class="volume-track"><div class="volume-level"></div><div class="volume-handle"></div></div>
       </div>
     </div>
   </div>
@@ -61,5 +98,11 @@
   <audio id="sfx-audio" preload="auto"></audio>
 
   <script src="country-scroll.js"></script>
+
+  <script>
+    if (document.documentElement.classList.contains('fast-mode')) {
+      document.body.classList.add('content-active', 'volume-visible', 'nav-visible', 'scrolled');
+    }
+  </script>
 </body>
 </html>

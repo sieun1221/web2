@@ -14,7 +14,6 @@ html, body {
 
 /* 배경 */
 body {
-  /* images 폴더 안의 배경 이미지 */
   background-image: url('images/country_background.jpg');
   background-size: cover;
   background-position: center;
@@ -59,7 +58,7 @@ body.content-active .back-link {
   opacity: 1 !important;
 }
 
-/* 🚨 [원상복구] 타이틀: 원래 크기(1.8배)와 위치(37%)로 되돌림 */
+/* 타이틀 */
 .title {
   position: absolute;
   top: 37%; 
@@ -75,7 +74,7 @@ body.content-active .back-link {
   animation: slideUp 0.6s forwards 0.4s;
 }
 
-/* 🚨 [원상복구] 캡션: 원래 크기(16px)와 위치(63%)로 되돌림 */
+/* 캡션 */
 .caption {
   position: absolute;
   top: 63%; 
@@ -152,26 +151,24 @@ body.scrolled .mouse-trigger {
   pointer-events: none !important;
 }
 
-
 /* =========================================================
-   [이미지 설정] circle.png 사용
+   [이미지 설정] circle.png 사용 (수정됨)
    ========================================================= */
 
-/* 1. 블러 레이어 (사용 안 함) */
 .bottom-arc-blur {
   display: none !important;
 }
 
-/* 2. 메인 이미지 레이어 (circle.png) */
 .bottom-arc-line {
   position: fixed;
-  width: 100%;
+  width: 100vw;           /* 화면 전체 너비 기준 */
   height: 100vh;
   bottom: 0;
-  left: 0;
+  left: 50%;              /* 🚨 기준점을 화면 정중앙으로 설정 */
+  /* 🚨 좌측으로 50%만큼 다시 밀어서 완벽한 가로 중앙 정렬 */
+  transform: translateX(-50%) translateY(0) scale(1);
   z-index: 4; 
 
-  /* circle.png 파일 사용 */
   background-image: url('./circle.png');
   background-size: contain; 
   background-repeat: no-repeat;
@@ -179,19 +176,22 @@ body.scrolled .mouse-trigger {
 
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.5s ease-in-out 1.6s, transform 1.5s ease-out;
+  /* transition에 transform 포함 */
+  transition: opacity 1.5s ease-in-out, transform 1.5s ease-out;
 }
 
 body.scrolled .bottom-arc-line {
   opacity: 1;
 }
 
-/* 다음 단계 진입 시 이동 */
+/* 스테이지 진입(content-active) 시 위치 조정 */
 body.content-active .bottom-arc-line {
   opacity: 1 !important;
-  transform: translateY(50px) scale(0.95);
+  /* 🚨 translateX(-50%)를 유지해야 중앙이 안 틀어짐 */
+  transform: translateX(-50%) translateY(50px) scale(0.95) !important;
 }
 
+/* ========================================================= */
 
 /* 중앙 원형 */
 .center-orb {
@@ -252,11 +252,7 @@ body.scrolled .orb-hint {
   transition-delay: 2.0s;
 }
 
-/* =========================================================
-   [상단 UI] 사운드 바 중앙 정렬 + 아이콘 오른쪽 이동
-   ========================================================= */
-
-/* 상단 컨트롤 래퍼 */
+/* 상단 컨트롤 */
 .top-controls-wrapper {
   position: fixed;
   top: 36px;
@@ -274,7 +270,6 @@ body.volume-visible .top-controls-wrapper {
   opacity: 1;
 }
 
-/* 음악 바 */
 .music-bar-container {
   position: relative;
   width: 260px;
@@ -291,7 +286,6 @@ body.volume-visible .top-controls-wrapper {
   transition: width 0.12s linear;
 }
 
-/* 볼륨 컨트롤 (아이콘) */
 .volume-control {
   position: absolute;
   left: 100%;
@@ -314,14 +308,7 @@ body.volume-visible .top-controls-wrapper {
   justify-content: center;
   transition: opacity 0.2s;
 }
-.volume-icon svg {
-  stroke-width: 2px;
-}
-.volume-icon:hover {
-  opacity: 0.7;
-}
 
-/* 슬라이더 팝업 */
 .volume-slider {
   position: absolute;
   top: 36px;
@@ -373,15 +360,14 @@ body.volume-visible .top-controls-wrapper {
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 🚨 [유지] 스테이지 라벨은 위로 올리고 작게 설정 */
 .stage-label {
   position: fixed;
-  top: 72px; /* 상향 조정 */
+  top: 72px; 
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Sanchez', serif;
   color: #ffffff !important;
-  font-size: 16px; /* 크기 축소 */
+  font-size: 16px;
   font-weight: 400;
   text-align: center;
   z-index: 9999; 
@@ -421,7 +407,7 @@ body.nav-visible .stage-label {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* 네비게이션 컨테이너 */
+/* 네비게이션 */
 .nav-container {
   position: fixed;
   bottom: 60px;
@@ -449,20 +435,11 @@ body.nav-visible .nav-container {
   color: #222;
   width: 48px;
   height: 48px;
-  padding: 0;
-  font-size: 32px;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
   text-shadow: 0 0 3px rgba(255,255,255,0.8);
   transition: color 0.3s, transform 0.2s;
-}
-.reset-button:hover,
-.prev-stage-arrow:hover,
-.next-stage-arrow:hover {
-  color: #000;
-  transform: scale(1.1);
 }
 
 .prev-stage-arrow.nav-disabled,
@@ -484,22 +461,62 @@ body.scrolled .caption::before {
   opacity: 0;
 }
 
-.title .char,
-.caption .char {
-  display: inline-block;
-  opacity: 1;
-}
-
 /* 모바일 대응 */
 @media (max-width: 768px) {
   .title {
     font-size: calc(60px * 1.8);
   }
-  .caption {
-    bottom: 90px;
-  }
   .nav-container {
     gap: 30px;
     bottom: 40px;
   }
+}
+/* 네비게이션 버튼 (기존 코드에서 크기 보강) */
+.reset-button,
+.prev-stage-arrow,
+.next-stage-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  width: 60px;       /* 48px에서 더 키움 */
+  height: 60px;
+  padding: 0;
+  font-size: 40px;    /* 🚨 텍스트(아이콘) 크기 대폭 상향 */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
+  transition: color 0.3s, transform 0.2s, opacity 0.3s;
+}
+
+.reset-button:hover,
+.prev-stage-arrow:hover,
+.next-stage-arrow:hover {
+  color: #000;
+  transform: scale(1.15); /* 호버 시 살짝 더 크게 */
+}
+
+/* 비활성화 상태 */
+.prev-stage-arrow.nav-disabled,
+.next-stage-arrow.nav-disabled {
+  opacity: 0.15 !important;
+  pointer-events: none !important;
+  color: #777;
+}
+
+/* 네비게이션 컨테이너 간격 조절 */
+.nav-container {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 80px;         /* 버튼 사이 간격을 더 넓혀 시원하게 배치 */
+  align-items: center;
+  z-index: 101;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }

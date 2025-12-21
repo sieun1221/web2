@@ -52,15 +52,10 @@ const STAGE_CONFIG = {
 if (backgroundAudio) backgroundAudio.volume = 0.3;
 if (sfxAudio) sfxAudio.volume = 0.3;
 
-// =========================================================
-// 🚨 [수정] 오디오 재생 로직
-// =========================================================
-
-// 배경음(나라이름.mp3) 재생 함수
+// 배경음 재생 함수
 function playInitialBackground() {
   if (backgroundAudio) {
     backgroundAudio.play().catch(() => {
-      // 차단 시 클릭하면 바로 재생되도록 설정
       document.addEventListener('click', () => {
         backgroundAudio.play();
       }, { once: true });
@@ -131,7 +126,6 @@ const setScrolledState = () => {
   scrolled = true;
   body.classList.add("scrolled");
   disappearText();
-  // 휠 내릴 때 혹시 안나고 있었다면 재생 시도
   playInitialBackground();
 };
 
@@ -166,7 +160,6 @@ function initializeRandomOrbs() {
   document.body.classList.add("nav-visible");
 }
 
-// 🚨 [수정] 스테이지 초기화 시에는 소리를 재생하지 않음
 function initializeStage(stage) {
   if (stage < 1 || stage > 3) return;
   currentStage = stage;
@@ -183,14 +176,12 @@ function initializeStage(stage) {
     stageLabel.textContent = `0${currentStage}. ${city}, ${time}`;
   }
 
-  // 🚨 스테이지 진입 시 기존 음악 정지 (작은 원 누르기 전까지 정적 유지)
   stopAllAudio();
 
   let bgmPath = currentStage === 1 ? initialBgAudioSrc : `./audio/${countryNameLower}${config.bgmIndex}.mp3`;
   if (backgroundAudio) {
     backgroundAudio.src = bgmPath;
     backgroundAudio.loop = true;
-    // .play()를 호출하지 않음!
   }
   
   setTimeout(initializeRandomOrbs, 500);
@@ -210,18 +201,18 @@ const handleOrbClick = () => {
     orbHint.style.opacity = "0";
   }
   if (bottomArc) {
+    // 순차 진행 시 중앙 정렬 위치값 할당
+    bottomArc.style.left = "50%";
     bottomArc.style.transform = "translateX(-50%) translateY(100px) scale(0.8)";
     bottomArc.style.opacity = "1";
   }
   initializeStage(1);
 };
 
-// 🚨 [수정] 작은 원을 클릭할 때 비로소 소리(SFX)가 재생됨
 function handleOrbClickStage1(e) {
   const target = e.target;
   if (target.classList.contains("clicked")) return;
 
-  // 다른 소리들 정리
   if (backgroundAudio) backgroundAudio.pause();
   if (sfxAudio) {
     sfxAudio.pause();
@@ -340,15 +331,40 @@ if (resetButton) resetButton.addEventListener("click", softResetStage);
 initVolumeControl();
 updateNavArrows();
 
+// =========================================================
+// 🚨 [수정된 부분] URL 파라미터 처리 및 위치 초기화
+// =========================================================
 const urlParams = new URLSearchParams(window.location.search);
 const startStage = urlParams.get("start");
+
 if (startStage) {
   setScrolledState();
   document.body.classList.add("content-active");
+  
+  // 1. 기존 메인 UI 즉시 숨김
   if (mouseTrigger) mouseTrigger.style.opacity = "0";
   if (titleElement) titleElement.style.display = "none";
   if (captionElement) captionElement.style.display = "none";
-  if (centerOrb) centerOrb.style.display = "none";
+  if (centerOrb) {
+    centerOrb.style.display = "none";
+    centerOrb.style.opacity = "0";
+  }
   if (orbHint) orbHint.style.display = "none";
+
+  // 2. 🚨 [중요] 되돌아올 때 circle.png(bottomArc) 위치 강제 중앙 고정
+  if (bottomArc) {
+    bottomArc.style.transition = "none"; // 순간 이동
+    bottomArc.style.opacity = "1";
+    bottomArc.style.left = "50%"; // 가로 중앙축 설정
+    // CSS에서 translateX(-50%)를 쓰고 있으므로 동일하게 유지하며 아래로 100px 이동
+    bottomArc.style.transform = "translateX(-50%) translateY(100px) scale(0.8)";
+    
+    // 강제 위치 할당 후 다음 프레임에서 트랜지션 복구
+    requestAnimationFrame(() => {
+      bottomArc.style.transition = "transform 0.5s ease, opacity 0.5s ease";
+    });
+  }
+
+  // 3. 지정된 스테이지로 이동
   initializeStage(parseInt(startStage, 10));
 }
